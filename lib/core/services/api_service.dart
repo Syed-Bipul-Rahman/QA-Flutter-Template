@@ -241,6 +241,119 @@ class ApiService {
     }
   }
 
+  /// Uploads a single file to the specified path
+  ///
+  /// Example usage:
+  /// ```dart
+  /// final file = await MultipartFile.fromFile('/path/to/file.jpg');
+  /// final response = await _apiService.uploadFile(
+  ///   '/api/upload',
+  ///   file: file,
+  ///   fileName: 'avatar.jpg',
+  /// );
+  /// ```
+  Future<Response> uploadFile(
+    String path, {
+    required MultipartFile file,
+    String fieldName = 'file',
+    Map<String, dynamic>? data,
+    Options? options,
+    CancelToken? cancelToken,
+  }) async {
+    try {
+      final formData = FormData.fromMap({fieldName: file, ...?data});
+
+      return await _dio.post(
+        path,
+        data: formData,
+        options: options,
+        cancelToken: cancelToken,
+      );
+    } on DioException catch (e) {
+      throw _handleDioError(e);
+    } catch (e) {
+      throw UnknownException(e.toString());
+    }
+  }
+
+  /// Uploads multiple files to the specified path
+  ///
+  /// Example usage:
+  /// ```dart
+  /// final files = [
+  ///   await MultipartFile.fromFile('/path/to/file1.jpg', filename: 'file1.jpg'),
+  ///   await MultipartFile.fromFile('/path/to/file2.jpg', filename: 'file2.jpg'),
+  /// ];
+  /// final response = await _apiService.uploadMultipleFiles(
+  ///   '/api/upload',
+  ///   files: files,
+  ///   fieldName: 'images',
+  /// );
+  /// ```
+  Future<Response> uploadMultipleFiles(
+    String path, {
+    required List<MultipartFile> files,
+    String fieldName = 'files',
+    Map<String, dynamic>? data,
+    Options? options,
+    CancelToken? cancelToken,
+  }) async {
+    try {
+      final formData = FormData.fromMap({fieldName: files, ...?data});
+
+      return await _dio.post(
+        path,
+        data: formData,
+        options: options,
+        cancelToken: cancelToken,
+      );
+    } on DioException catch (e) {
+      throw _handleDioError(e);
+    } catch (e) {
+      throw UnknownException(e.toString());
+    }
+  }
+
+  /// Uploads a file with progress tracking
+  ///
+  /// Example usage:
+  /// ```dart
+  /// final file = await MultipartFile.fromFile('/path/to/file.jpg');
+  /// final response = await _apiService.uploadFileWithProgress(
+  ///   '/api/upload',
+  ///   file: file,
+  ///   onSendProgress: (int sent, int total) {
+  ///     double progress = (sent / total) * 100;
+  ///     print('Upload progress: $progress%');
+  ///   },
+  /// );
+  /// ```
+  Future<Response> uploadFileWithProgress(
+    String path, {
+    required MultipartFile file,
+    String fieldName = 'file',
+    Map<String, dynamic>? data,
+    Options? options,
+    CancelToken? cancelToken,
+    void Function(int, int)? onSendProgress,
+  }) async {
+    try {
+      final formData = FormData.fromMap({fieldName: file, ...?data});
+
+      return await _dio.post(
+        path,
+        data: formData,
+        onSendProgress: onSendProgress,
+        options: options,
+        cancelToken: cancelToken,
+      );
+    } on DioException catch (e) {
+      throw _handleDioError(e);
+    } catch (e) {
+      throw UnknownException(e.toString());
+    }
+  }
+
   /// Converts DioException to typed AppException for better error handling.
   ///
   /// This method maps Dio's generic exceptions to our custom exception types,

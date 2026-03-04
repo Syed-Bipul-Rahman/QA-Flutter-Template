@@ -55,7 +55,8 @@ class HomePage extends StatelessWidget {
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.easeInOut,
                 child: Container(
-                  height: 56.h,
+                  padding: EdgeInsets.only(top: statusBarHeight),
+                  height: statusBarHeight + 56.h,
                   color: Colors.white,
                   child: const HomeAppBar(),
                 ),

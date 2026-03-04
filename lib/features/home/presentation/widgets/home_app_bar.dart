@@ -7,6 +7,8 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      toolbarHeight: 56.h,
+      primary: false,
       title: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

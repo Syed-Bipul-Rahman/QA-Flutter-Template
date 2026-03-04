@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import '../controllers/home_controller.dart';
 import 'banner_carousel.dart';
 import 'category_item.dart';
@@ -21,11 +22,17 @@ class HomeContent extends StatelessWidget {
       child: CustomScrollView(
         controller: controller.scrollController,
         slivers: [
-          // Search Bar
+          // Search Bar (hidden when overlay search bar is active)
           SliverToBoxAdapter(
-            child: SearchBarWidget(
-              padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 16.h),
-            ),
+            child: Obx(() => Visibility(
+              visible: controller.showAppBar,
+              maintainSize: true,
+              maintainAnimation: true,
+              maintainState: true,
+              child: SearchBarWidget(
+                padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 16.h),
+              ),
+            )),
           ),
 
           SliverToBoxAdapter(
